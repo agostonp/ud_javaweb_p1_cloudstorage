@@ -18,12 +18,15 @@ public interface FileMapper {
     public List<MFile> listFileNames(Integer userid);
 
     @Select("SELECT * FROM FILES WHERE fileId = #{fileId}")
-    public MFile getFileById(Integer fileId);
+    public MFile getById(Integer fileId);
 
-    @Select("SELECT COUNT(1) FROM FILES WHERE fileName = #{fileName}")
-    public Boolean checkFileExistsByName(String fileName);
+    @Select("SELECT * FROM FILES WHERE fileId = #{fileId} AND userid = #{userid}")
+    public MFile getByUser(Integer fileId, Integer userid);
 
-    @Insert("INSERT INTO FILES (filename, contenttype, filesize, userid) VALUES (#{fileName}, #{contentType}, #{fileSize}, #{userid})")
+    @Select("SELECT COUNT(1) FROM FILES WHERE fileName = #{fileName} AND userid = #{userid}")
+    public Boolean checkFileExistsByName(String fileName, Integer userid);
+
+    @Insert("INSERT INTO FILES (filename, contenttype, filesize, userid, filedata) VALUES (#{fileName}, #{contentType}, #{fileSize}, #{userid}, #{fileData})")
     @Options(useGeneratedKeys=true, keyProperty="fileId")
     public int insert(MFile file);
 

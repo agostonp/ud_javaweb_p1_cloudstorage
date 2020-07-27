@@ -1,5 +1,7 @@
 package com.udacity.jwdnd.course1.cloudstorage.service;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
@@ -25,26 +27,49 @@ public class FileService {
         System.out.println("FileService bean created");
     }
 
-    public boolean isFileNameValid(String filePath) {
+    public boolean isFileNameValid(String filePath, String username) {
         String fileName = filePath;
         System.out.println("!!!WARNING! isFileNameAvailable: DUMMY FILE PATH TO NAME CONVERSION IS USED");
 
-        if(fileName == null || fileName.isEmpty()) {
+        if(fileName == null || fileName.isBlank()) {
             return false;
         }
-            
-        return !fileMapper.checkFileExistsByName(fileName);
-    }
-
-    public int uploadFile(final MultipartFile fileUpload, final String username) {
-        System.out.println("In FileService::uploadFile:" + fileUpload.getOriginalFilename());
 
         int userid = userService.getUser(username).getUserid();
 
-        //InputStream fis = fileUpload.getInputStream();
-        MFile file = new MFile(null, fileUpload.getOriginalFilename(), fileUpload.getContentType(), Long.toString(fileUpload.getSize()), userid);
+        return !fileMapper.checkFileExistsByName(fileName, userid);
+    }
 
-        return fileMapper.insert(file);
+    public int uploadFile(final MultipartFile fileUpload, final String username) throws IOException {
+        System.out.printf("In FileService::uploadFile: filename: %s username: %s\n", fileUpload.getOriginalFilename(), username);
+
+        int userid = userService.getUser(username).getUserid();
+        InputStream fis = null;
+        try {
+            fis = fileUpload.getInputStream();
+            MFile file = new MFile(null, fileUpload.getOriginalFilename(), fileUpload.getContentType(),
+                                Long.toString(fileUpload.getSize()), userid, fis);
+
+            int fileId = fileMapper.insert(file);
+            if(fileId < 1) {
+                throw new IOException("Failed to insert file data to database");
+            }
+            return fileId;
+        }
+        finally {
+            fis.close();
+        }
+    }
+
+    public MFile downloadFile(final Integer fileId, final String username) {
+        System.out.printf("In FileService::downloadFile fileId: %d username: %s\n", fileId, username );
+
+        Integer userid = userService.getUser(username).getUserid();
+
+        MFile file = fileMapper.getByUser(fileId, userid);
+        System.out.println("In FileService::downloadFile File fields:/n" + file );
+        
+        return file;
     }
 
     public void deleteFile(final Integer fileId, final String username) {
