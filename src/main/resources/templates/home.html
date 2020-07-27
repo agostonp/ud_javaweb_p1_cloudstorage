@@ -26,6 +26,12 @@
                 <div class="tab-content" id="nav-tabContent">
                     <div class="tab-pane fade show active" id="nav-files" role="tabpanel" aria-labelledby="nav-files-tab">
                         <form action="#" enctype="multipart/form-data" th:action="@{/file-upload}" method="POST">
+                            <div class="alert alert-dark" th:if="${uploadSuccess}">
+                                <span>File uploaded successfully!</span>
+                            </div>
+                            <div class="alert alert-danger" th:if="${uploadError}">
+                                <span th:text="${uploadError}"></span>
+                            </div>
                             <div class="container">
                                 <div class="row" style="margin: 1em;">
                                     <div class="col-sm-2">
@@ -51,7 +57,7 @@
                                 <tbody>
                                     <tr th:each="file : ${fileList}">
                                         <td>
-                                            <a target="_blank" class="btn btn-success" th:href="@{/file-view(fileId=${file.fileId})}">View</a>
+                                            <a target="_blank" class="btn btn-success" th:href="@{/file-download(fileId=${file.fileId})}">View</a>
                                             <a  class="btn btn-danger" th:href="@{/file-delete(fileId=${file.fileId})}">Delete</a>
                                         </td>
                                         <th scope="row" th:text="${file.fileName}"></th>
