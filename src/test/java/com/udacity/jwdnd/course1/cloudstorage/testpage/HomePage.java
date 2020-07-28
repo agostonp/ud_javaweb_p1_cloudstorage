@@ -5,13 +5,14 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 
+
 public class HomePage {
 
-    //@FindBy(id="logout-button")
-    //private WebElement wLogoutButton;
+    @FindBy(id="logout-button")
+    private WebElement wLogoutButton;
 
-    @FindBy(id="logout-form")
-    private WebElement wLogoutForm;
+    //@FindBy(id="logout-form")
+    //private WebElement wLogoutForm;
 
     //private final WebDriver driver;
 
@@ -20,9 +21,10 @@ public class HomePage {
         //this.driver = driver;
     }
 
-    public void logout() {
-        //wLogoutButton.click();
-        wLogoutForm.submit();
+    public void logout() throws InterruptedException {
+        wLogoutButton.click();
+        //wLogoutForm.submit();
+        Thread.sleep(1000);
     }
 
 }

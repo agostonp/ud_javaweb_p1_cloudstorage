@@ -28,12 +28,13 @@ public class LoginPage {
         this.driver = driver;
     }
 
-    public void login(final String username, final String password) {
+    public void login(final String username, final String password) throws InterruptedException {
         wUsername.clear();
         wUsername.sendKeys(username);
         wPassword.clear();
         wPassword.sendKeys(password);
         wSubmitButton.click();
+        Thread.sleep(1000);
     }
 
     // This can only be used after successful logout
