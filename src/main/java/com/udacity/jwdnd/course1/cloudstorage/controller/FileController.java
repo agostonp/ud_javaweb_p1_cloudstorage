@@ -31,12 +31,14 @@ public class FileController {
         System.out.println("FileController bean created");
     }
 
+
     @GetMapping("/home")
     public String getFileTab(Authentication authentication, Model model) {
         System.out.println("In getFileTab");
         model.addAttribute("fileList", fileService.listFileNames(authentication.getName()));
         return "home";
     }
+
 
     @PostMapping("/file-upload")
     public String postFileUpload(Authentication authentication, @RequestParam("fileUpload") MultipartFile fileUpload, Model model) {
@@ -71,7 +73,8 @@ public class FileController {
         return "home";
     }
 
-    @GetMapping(value="/file-delete")
+
+    @GetMapping("/file-delete")
     public String getFileDelete(Authentication authentication, @RequestParam("fileId") Integer fileId, Model model) {
         System.out.println("In getFileDelete:" + fileId);
 
@@ -81,7 +84,8 @@ public class FileController {
         return "home";
     }
 
-    @GetMapping(value="/file-download")
+
+    @GetMapping("/file-download")
     public ResponseEntity<byte[]> getFileDownload(Authentication authentication, @RequestParam("fileId") Integer fileId) throws IOException {
         System.out.println("In getFileDownload:" + fileId);
 
