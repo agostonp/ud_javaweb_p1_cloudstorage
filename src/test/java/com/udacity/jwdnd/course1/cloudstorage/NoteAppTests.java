@@ -58,7 +58,7 @@ class NoteAppTests {
 
 	// 2.1 Write a test that creates a note, and verifies it is displayed
 	@Test
-	public void createNote() throws InterruptedException {
+	public void createNote() {
 		String title = "Test Note creation";
 		String description = "// 2.1 Write a test that creates a note,\n and verifies it is displayed";
 		NotesPageTab notesPageTab = new NotesPageTab(driver);

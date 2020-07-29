@@ -5,10 +5,13 @@ import java.util.List;
 
 import com.udacity.jwdnd.course1.cloudstorage.model.Note;
 
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 
 public class NotesPageTab {
@@ -35,31 +38,38 @@ public class NotesPageTab {
     private List<WebElement> wNoteDescriptionList;
 
     //private final WebDriver driver;
+    private final WebDriverWait wait;
 
     public NotesPageTab(final WebDriver driver) {
+        this.wait = new WebDriverWait(driver, 1000);
+        wait.until(ExpectedConditions.presenceOfElementLocated(By.id("note-save-button")));
+
         PageFactory.initElements(driver, this);
         //this.driver = driver;
     }
 
-    public void showNotes() throws InterruptedException {
+    public void showNotes() {
+        wait.until(ExpectedConditions.elementToBeClickable(wNotesTabLink));
+        try { Thread.sleep(500); }
+        catch(InterruptedException e) {
+            System.out.println(e);
+        }
         wNotesTabLink.click();
-        Thread.sleep(1000);
     }
 
-    public void newNote(String title, String description) throws InterruptedException {
+    public void newNote(String title, String description) {
+        wait.until(ExpectedConditions.elementToBeClickable(wAddNoteButton));
         wAddNoteButton.click();
-        Thread.sleep(1000);
         fillNote(title, description);
-        Thread.sleep(1000);
     }
 
-    private void fillNote(String title, String description) throws InterruptedException {
+    private void fillNote(String title, String description) {
+        wait.until(ExpectedConditions.elementToBeClickable(wModalNoteSaveButton));
         wModalNoteTitle.clear();
         wModalNoteTitle.sendKeys(title);
         wModalNoteDesc.clear();
         wModalNoteDesc.sendKeys(description);
         wModalNoteSaveButton.click();
-        Thread.sleep(1000);
     }
 
     public List<Note> getNotes() {

@@ -6,6 +6,8 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class SignupPage {
     
@@ -25,13 +27,17 @@ public class SignupPage {
     private WebElement wSubmitButton;
 
     private final WebDriver driver;
+    private final WebDriverWait wait;
 
     public SignupPage(final WebDriver driver) {
-        PageFactory.initElements(driver, this);
         this.driver = driver;
+        this.wait = new WebDriverWait(driver, 1000);
+        wait.until(ExpectedConditions.presenceOfElementLocated(By.id("submit-button")));
+        PageFactory.initElements(driver, this);
     }
 
     public void signup(final String firstName, final String lastName, final String username, final String password) {
+        wait.until(ExpectedConditions.elementToBeClickable(wSubmitButton));
         wFirstName.clear();
         wFirstName.sendKeys(firstName);
         wLastName.clear();
@@ -44,13 +50,14 @@ public class SignupPage {
     }
 
     public String getSuccesMsg() throws NoSuchElementException {
+        wait.until(ExpectedConditions.presenceOfElementLocated(By.id("success-msg")));
         return driver.findElement(By.id("success-msg")).getText();
     }
 
     // This can only be used after successful signup
     public boolean goLogin() {
         try {
-            WebElement wLogin = driver.findElement(By.id("login-link"));
+            WebElement wLogin = wait.until(ExpectedConditions.elementToBeClickable(By.id("login-link")));
             driver.get(wLogin.getAttribute("href"));
             return true;
         } catch(NoSuchElementException e) {

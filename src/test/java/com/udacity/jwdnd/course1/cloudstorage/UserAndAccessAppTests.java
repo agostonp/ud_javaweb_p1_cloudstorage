@@ -103,9 +103,9 @@ class UserAndAccessAppTests {
 		loginPage = null;
 
 		// Verify that this is the Home page
+		HomePage homePage = new HomePage(driver);
 		assertEquals(baseURL + "/home", driver.getCurrentUrl());
 		assertEquals("Home", driver.getTitle());
-		HomePage homePage = new HomePage(driver);
 
 		homePage.logout();
 		homePage = null;

@@ -6,6 +6,8 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class LoginPage {
 
@@ -22,23 +24,27 @@ public class LoginPage {
     private WebElement wSignupLink;
 
     private final WebDriver driver;
+    private final WebDriverWait wait;
 
     public LoginPage(final WebDriver driver) {
-        PageFactory.initElements(driver, this);
         this.driver = driver;
+        this.wait = new WebDriverWait(driver, 1000);
+        wait.until(ExpectedConditions.presenceOfElementLocated(By.id("submit-button")));
+        PageFactory.initElements(driver, this);
     }
 
-    public void login(final String username, final String password) throws InterruptedException {
+    public void login(final String username, final String password) {
+        wait.until(ExpectedConditions.elementToBeClickable(wSubmitButton));
         wUsername.clear();
         wUsername.sendKeys(username);
         wPassword.clear();
         wPassword.sendKeys(password);
         wSubmitButton.click();
-        Thread.sleep(1000);
     }
 
     // This can only be used after successful logout
     public String getLogoutMessage()  throws NoSuchElementException {
-            return driver.findElement(By.id("logout-message")).getText();
+        wait.until(ExpectedConditions.presenceOfElementLocated(By.id("logout-message")));
+        return driver.findElement(By.id("logout-message")).getText();
     }
 }
