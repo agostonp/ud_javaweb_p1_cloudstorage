@@ -95,5 +95,15 @@ class NotesAppTests {
 	// 2.3 Write a test that deletes a note and verifies that the note is no longer displayed
 	@Test
 	public void deleteNote() {
+		String title = "Test Note Deletion";
+		String description = "// 2.3 Write a test that deletes a note\n and verifies that the note is no longer displayed";
+		NotesPageTab notesPageTab = new NotesPageTab(driver);
+		notesPageTab.showNotes();
+		notesPageTab.newNote(title, description);
+
+		assertTrue(notesPageTab.deleteNote(0));
+
+		List<Note> notes = notesPageTab.getNotes();
+		assertEquals(0, notes.size());
 	}
 }

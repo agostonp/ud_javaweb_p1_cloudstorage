@@ -34,6 +34,9 @@ public class NotesPageTab {
     @FindBy(id="note-edit-list")
     private List<WebElement> wNoteEditList;
 
+    @FindBy(id="note-delete-list")
+    private List<WebElement> wNoteDeleteList;
+
     @FindBy(id="note-title-list")
     private List<WebElement> wNoteTitleList;
 
@@ -85,6 +88,17 @@ public class NotesPageTab {
         wModalNoteDesc.clear();
         wModalNoteDesc.sendKeys(description);
         wModalNoteSaveButton.click();
+    }
+
+    public boolean deleteNote(int index) {
+        if(wNoteDeleteList.size() <= index)
+            return false;
+        wait.until(ExpectedConditions.elementToBeClickable(wNoteDeleteList.get(index)));
+        try { Thread.sleep(500); }
+        catch(InterruptedException e) { System.out.println(e);}
+
+        wNoteDeleteList.get(index).click();
+        return true;
     }
 
     public List<Note> getNotes() {
