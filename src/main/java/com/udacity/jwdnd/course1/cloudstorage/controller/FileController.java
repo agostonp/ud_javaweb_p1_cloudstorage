@@ -55,12 +55,14 @@ public class FileController {
             }
         }
 
-        model.addAttribute("fileList", fileService.listFileNames(authentication.getName()));
-
-        if(error == null)
+        if(error == null) {
             model.addAttribute("uploadSuccess", true);
-        else
+        } else {
             model.addAttribute("uploadError", error);
+        }
+
+        model.addAttribute("fileList", fileService.listFileNames(authentication.getName()));
+        model.addAttribute("activeTab", "files");
 
         return "home";
     }
@@ -73,6 +75,8 @@ public class FileController {
         fileService.deleteFile(fileId, authentication.getName());;
 
         model.addAttribute("fileList", fileService.listFileNames(authentication.getName()));
+        model.addAttribute("activeTab", "files");
+
         return "home";
     }
 
