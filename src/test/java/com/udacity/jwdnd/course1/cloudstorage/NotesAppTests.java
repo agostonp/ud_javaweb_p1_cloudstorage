@@ -68,7 +68,7 @@ class NotesAppTests {
 		List<Note> notes = notesPageTab.getNotes();
 		assertEquals(1, notes.size());
 		assertEquals(title, notes.get(0).getNoteTitle());
-		assertEquals(description.replace('\n', ' '), notes.get(0).getNoteDescription());
+		assertEquals(description.replace("\n", ""), notes.get(0).getNoteDescription());
 	}
 
 

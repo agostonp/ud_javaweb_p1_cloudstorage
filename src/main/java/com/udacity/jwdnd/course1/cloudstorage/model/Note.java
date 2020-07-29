@@ -50,7 +50,7 @@ public class Note {
         return "{" +
             " noteId='" + noteId + "'" +
             ", noteTitle='" + noteTitle + "'" +
-            ", noteDescription='" + noteDescription.replace('\n', ' ') + "'" +
+            ", noteDescription='" + noteDescription.replace("\n", "") + "'" +
             ", userid='" + userid + "'" +
             "}";
     }
