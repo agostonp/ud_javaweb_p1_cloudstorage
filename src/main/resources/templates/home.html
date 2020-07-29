@@ -95,10 +95,9 @@
                                 <tbody>
                                     <tr th:each="note : ${notesList}">
                                         <td>
-                                            <button type="button" class="btn btn-success" th:data1="${note.noteId}" th:data2="${note.noteTitle}" th:data3="${note.noteDescription}"
+                                            <button type="button" class="btn btn-success" id="note-edit-list"
+                                                    th:data1="${note.noteId}" th:data2="${note.noteTitle}" th:data3="${note.noteDescription}"
                                                     th:onclick="showNoteModal(this.getAttribute('data1'), this.getAttribute('data2'), this.getAttribute('data3'))">Edit</button>
-                                                    <!--th:onclick="|showNoteModal('${note.noteId}_${note.noteTitle}_${note.noteDescription}')|"
-                                                        th:onclick="'showNoteModal(\'' + ${note.noteId} + '\', \'' + ${note.noteTitle} + '\', \'' + ${note.noteDescription} + '\')'"-->
                                             <a class="btn btn-danger">Delete</a>
                                         </td>
                                         <th scope="row" id="note-title-list" th:text="${note.noteTitle}">Example Note Title</th>

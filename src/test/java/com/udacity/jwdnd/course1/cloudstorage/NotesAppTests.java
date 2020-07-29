@@ -75,6 +75,20 @@ class NotesAppTests {
 	// 2.2 Write a test that edits an existing note and verifies that the changes are displayed
 	@Test
 	public void editNote() {
+		String title = "Test Note creation";
+		String description = "// 2.1 Write a test that creates a note,\n and verifies it is displayed";
+		String newTitle = "Test Note Editing";
+		String newDescription = "// 2.2 Write a test that edits an existing note\n and verifies that the changes are displayed";
+		NotesPageTab notesPageTab = new NotesPageTab(driver);
+		notesPageTab.showNotes();
+		notesPageTab.newNote(title, description);
+
+		assertTrue(notesPageTab.editNote(0, newTitle, newDescription));
+
+		List<Note> notes = notesPageTab.getNotes();
+		assertEquals(1, notes.size());
+		assertEquals(newTitle, notes.get(0).getNoteTitle());
+		assertEquals(newDescription.replace("\n", ""), notes.get(0).getNoteDescription());
 	}
 
 

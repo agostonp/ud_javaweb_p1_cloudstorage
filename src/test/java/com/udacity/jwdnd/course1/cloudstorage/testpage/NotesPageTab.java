@@ -31,6 +31,9 @@ public class NotesPageTab {
     @FindBy(id="note-save-button")
     private WebElement wModalNoteSaveButton;
 
+    @FindBy(id="note-edit-list")
+    private List<WebElement> wNoteEditList;
+
     @FindBy(id="note-title-list")
     private List<WebElement> wNoteTitleList;
 
@@ -61,6 +64,18 @@ public class NotesPageTab {
         wait.until(ExpectedConditions.elementToBeClickable(wAddNoteButton));
         wAddNoteButton.click();
         fillNote(title, description);
+    }
+
+    public boolean editNote(int index, String newTitle, String newDescription) {
+        if(wNoteEditList.size() <= index)
+            return false;
+        wait.until(ExpectedConditions.elementToBeClickable(wNoteEditList.get(index)));
+        try { Thread.sleep(500); }
+        catch(InterruptedException e) { System.out.println(e);}
+
+        wNoteEditList.get(index).click();
+        fillNote(newTitle, newDescription);
+        return true;
     }
 
     private void fillNote(String title, String description) {
