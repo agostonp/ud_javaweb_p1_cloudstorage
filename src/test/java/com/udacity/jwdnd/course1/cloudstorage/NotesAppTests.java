@@ -24,7 +24,7 @@ import org.springframework.boot.web.server.LocalServerPort;
 // ****************************************************************************
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-class NoteAppTests {
+class NotesAppTests {
 
 	@LocalServerPort
 	private int port;
