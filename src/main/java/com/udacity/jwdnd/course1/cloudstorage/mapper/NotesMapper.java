@@ -23,7 +23,6 @@ public interface NotesMapper {
     public int insert(Note note);
 
     @Update("UPDATE NOTES SET notetitle = #{noteTitle}, notedescription = #{noteDescription} WHERE noteid = #{noteId} AND userid = #{userid}")
-    @Options(useGeneratedKeys=true, keyProperty="noteId")
     public int updateByUser(Note note);
 
     @Delete("DELETE FROM NOTES WHERE noteid = #{noteId} AND userid = #{userid}")
