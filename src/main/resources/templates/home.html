@@ -98,7 +98,7 @@
                                             <button type="button" class="btn btn-success" id="note-edit-list"
                                                     th:data1="${note.noteId}" th:data2="${note.noteTitle}" th:data3="${note.noteDescription}"
                                                     th:onclick="showNoteModal(this.getAttribute('data1'), this.getAttribute('data2'), this.getAttribute('data3'))">Edit</button>
-                                            <a class="btn btn-danger" id="note-delete-list">Delete</a>
+                                            <a class="btn btn-danger" id="note-delete-list" th:href="@{/note-delete(noteId=${note.noteId})}">Delete</a>
                                         </td>
                                         <th scope="row" id="note-title-list" th:text="${note.noteTitle}">Example Note Title</th>
                                         <td id="note-description-list" th:text="${note.noteDescription}">Example Note Description </td>

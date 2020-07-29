@@ -10,8 +10,10 @@ import com.udacity.jwdnd.course1.cloudstorage.service.NotesService;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 public class NotesController {
@@ -49,6 +51,19 @@ public class NotesController {
             model.addAttribute("noteSavedSuccess", true);
         else
             model.addAttribute("noteError", error);
+
+        model.addAttribute("notesList", notesService.listNotes(authentication.getName()));
+        model.addAttribute("activeTab", "notes");
+
+        return "home";
+    }
+
+    @GetMapping("/note-delete")
+    public String getNoteDelete(Authentication authentication, @RequestParam("noteId") Integer noteId,
+                                @ModelAttribute("noteModal") Note note, Model model) {
+        System.out.println("In getNoteDelete:" + noteId);
+
+        notesService.deleteNote(noteId, authentication.getName());
 
         model.addAttribute("notesList", notesService.listNotes(authentication.getName()));
         model.addAttribute("activeTab", "notes");

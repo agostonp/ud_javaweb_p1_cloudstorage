@@ -54,28 +54,17 @@ public class NotesService {
         
 
         if(noteId < 1) {
-            throw new IOException("Failed to insert/update  data to database");
+            throw new IOException("Failed to insert/update Note data to database");
         }
         return noteId;
     }
 
-    public Note downloadFile(final Integer fileId, final String username) {
-        System.out.printf("In NotesService::downloadFile fileId: %d username: %s\n", fileId, username );
-
-        Integer userid = userService.getUser(username).getUserid();
-
-        Note file = notesMapper.getByUser(fileId, userid);
-        System.out.println("In NotesService::downloadFile File fields:/n" + file );
-        
-        return file;
-    }
-
-    public void deleteFile(final Integer fileId, final String username) {
-        System.out.printf("In NotesService::deleteFile fileId: %d username: %s\n", fileId, username );
+    public void deleteNote(final Integer noteId, final String username) {
+        System.out.printf("In NotesService::deleteNote noteId: %d username: %s\n", noteId, username );
 
         int userid = userService.getUser(username).getUserid();
 
-        notesMapper.deleteByUser(fileId, userid);
+        notesMapper.deleteByUser(noteId, userid);
     }
 
     public List<Note> listNotes(String userName) {
