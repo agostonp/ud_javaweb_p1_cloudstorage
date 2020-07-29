@@ -4,7 +4,9 @@ import java.io.IOException;
 
 import javax.annotation.PostConstruct;
 
+import com.udacity.jwdnd.course1.cloudstorage.model.Credential;
 import com.udacity.jwdnd.course1.cloudstorage.model.MFile;
+import com.udacity.jwdnd.course1.cloudstorage.model.Note;
 import com.udacity.jwdnd.course1.cloudstorage.service.FileService;
 
 import org.springframework.http.HttpHeaders;
@@ -14,6 +16,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
@@ -21,9 +24,11 @@ import org.springframework.web.multipart.MultipartFile;
 @Controller
 public class FileController {
     private final FileService fileService;
+    private final HomeController homeController;
 
-    public FileController(FileService fileService) {
+    public FileController(FileService fileService, HomeController homeController) {
         this.fileService = fileService;
+        this.homeController = homeController;
     }
 
     @PostConstruct
@@ -33,7 +38,8 @@ public class FileController {
 
 
     @PostMapping("/file-upload")
-    public String postFileUpload(Authentication authentication, @RequestParam("fileUpload") MultipartFile fileUpload, Model model) {
+    public String postFileUpload(Authentication authentication, @RequestParam("fileUpload") MultipartFile fileUpload, 
+                    @ModelAttribute("noteModal") Note note, @ModelAttribute("credentialModal") Credential credential, Model model) {
         System.out.printf("In postFileUpload: \"\s\"\n", fileUpload.getOriginalFilename());
         String error = null;
 
@@ -61,21 +67,20 @@ public class FileController {
             model.addAttribute("uploadError", error);
         }
 
-        model.addAttribute("fileList", fileService.listFileNames(authentication.getName()));
-        model.addAttribute("activeTab", "files");
+        homeController.addCommonModelAttributes(model, authentication.getName(), "files");
 
         return "home";
     }
 
 
     @GetMapping("/file-delete")
-    public String getFileDelete(Authentication authentication, @RequestParam("fileId") Integer fileId, Model model) {
+    public String getFileDelete(Authentication authentication, @RequestParam("fileId") Integer fileId, 
+                    @ModelAttribute("noteModal") Note note, @ModelAttribute("credentialModal") Credential credential, Model model) {
         System.out.println("In getFileDelete:" + fileId);
 
         fileService.deleteFile(fileId, authentication.getName());;
 
-        model.addAttribute("fileList", fileService.listFileNames(authentication.getName()));
-        model.addAttribute("activeTab", "files");
+        homeController.addCommonModelAttributes(model, authentication.getName(), "files");
 
         return "home";
     }

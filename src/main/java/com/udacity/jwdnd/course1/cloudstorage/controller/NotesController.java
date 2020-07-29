@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import javax.annotation.PostConstruct;
 
+import com.udacity.jwdnd.course1.cloudstorage.model.Credential;
 import com.udacity.jwdnd.course1.cloudstorage.model.Note;
 import com.udacity.jwdnd.course1.cloudstorage.service.NotesService;
 
@@ -18,9 +19,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Controller
 public class NotesController {
     private final NotesService notesService;
+    private final HomeController homeController;
 
-    public NotesController(NotesService notesService) {
+    public NotesController(NotesService notesService, HomeController homeController) {
         this.notesService = notesService;
+        this.homeController = homeController;
     }
 
     @PostConstruct
@@ -29,7 +32,8 @@ public class NotesController {
     }
 
     @PostMapping("/note-save")
-    public String postNoteSave(Authentication authentication, @ModelAttribute("noteModal") Note note, Model model) {
+    public String postNoteSave(Authentication authentication, @ModelAttribute("noteModal") Note note,
+                               @ModelAttribute("credentialModal") Credential credential, Model model) {
         System.out.println("In postNoteSave: " + note);
         String error = null;
 
@@ -52,21 +56,19 @@ public class NotesController {
         else
             model.addAttribute("noteError", error);
 
-        model.addAttribute("notesList", notesService.listNotes(authentication.getName()));
-        model.addAttribute("activeTab", "notes");
+        homeController.addCommonModelAttributes(model, authentication.getName(), "notes");
 
         return "home";
     }
 
     @GetMapping("/note-delete")
     public String getNoteDelete(Authentication authentication, @RequestParam("noteId") Integer noteId,
-                                @ModelAttribute("noteModal") Note note, Model model) {
+                                @ModelAttribute("noteModal") Note note, @ModelAttribute("credentialModal") Credential credential, Model model) {
         System.out.println("In getNoteDelete:" + noteId);
 
         notesService.deleteNote(noteId, authentication.getName());
 
-        model.addAttribute("notesList", notesService.listNotes(authentication.getName()));
-        model.addAttribute("activeTab", "notes");
+        homeController.addCommonModelAttributes(model, authentication.getName(), "notes");
 
         return "home";
     }
