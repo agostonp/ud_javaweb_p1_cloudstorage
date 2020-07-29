@@ -32,14 +32,6 @@ public class FileController {
     }
 
 
-    @GetMapping("/home")
-    public String getFileTab(Authentication authentication, Model model) {
-        System.out.println("In getFileTab");
-        model.addAttribute("fileList", fileService.listFileNames(authentication.getName()));
-        return "home";
-    }
-
-
     @PostMapping("/file-upload")
     public String postFileUpload(Authentication authentication, @RequestParam("fileUpload") MultipartFile fileUpload, Model model) {
         System.out.printf("In postFileUpload: \"\s\"\n", fileUpload.getOriginalFilename());
