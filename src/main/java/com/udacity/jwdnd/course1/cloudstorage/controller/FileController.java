@@ -4,7 +4,7 @@ import java.io.IOException;
 
 import javax.annotation.PostConstruct;
 
-import com.udacity.jwdnd.course1.cloudstorage.model.Credential;
+import com.udacity.jwdnd.course1.cloudstorage.model.CredentialForm;
 import com.udacity.jwdnd.course1.cloudstorage.model.MFile;
 import com.udacity.jwdnd.course1.cloudstorage.model.Note;
 import com.udacity.jwdnd.course1.cloudstorage.service.FileService;
@@ -39,7 +39,7 @@ public class FileController {
 
     @PostMapping("/file-upload")
     public String postFileUpload(Authentication authentication, @RequestParam("fileUpload") MultipartFile fileUpload, 
-                    @ModelAttribute("noteModal") Note note, @ModelAttribute("credentialModal") Credential credential, Model model) {
+                    @ModelAttribute("noteModal") Note note, @ModelAttribute("credentialModal") CredentialForm credentialForm, Model model) {
         System.out.printf("In postFileUpload: \"\s\"\n", fileUpload.getOriginalFilename());
         String error = null;
 
@@ -75,7 +75,7 @@ public class FileController {
 
     @GetMapping("/file-delete")
     public String getFileDelete(Authentication authentication, @RequestParam("fileId") Integer fileId, 
-                    @ModelAttribute("noteModal") Note note, @ModelAttribute("credentialModal") Credential credential, Model model) {
+                    @ModelAttribute("noteModal") Note note, @ModelAttribute("credentialModal") CredentialForm credentialForm, Model model) {
         System.out.println("In getFileDelete:" + fileId);
 
         fileService.deleteFile(fileId, authentication.getName());;

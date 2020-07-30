@@ -2,7 +2,7 @@ package com.udacity.jwdnd.course1.cloudstorage.controller;
 
 import javax.annotation.PostConstruct;
 
-import com.udacity.jwdnd.course1.cloudstorage.model.Credential;
+import com.udacity.jwdnd.course1.cloudstorage.model.CredentialForm;
 import com.udacity.jwdnd.course1.cloudstorage.model.Note;
 import com.udacity.jwdnd.course1.cloudstorage.service.CredentialsService;
 import com.udacity.jwdnd.course1.cloudstorage.service.FileService;
@@ -35,7 +35,7 @@ public class HomeController {
 
     @GetMapping("/home")
     public String getHomePage(Authentication authentication, @ModelAttribute("noteModal") Note note,
-                              @ModelAttribute("credentialModal") Credential credential, Model model) {
+                              @ModelAttribute("credentialModal") CredentialForm credentialForm, Model model) {
         System.out.println("In getHomePage");
         addCommonModelAttributes(model, authentication.getName(), "files");
 

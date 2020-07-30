@@ -4,7 +4,7 @@ import java.io.IOException;
 
 import javax.annotation.PostConstruct;
 
-import com.udacity.jwdnd.course1.cloudstorage.model.Credential;
+import com.udacity.jwdnd.course1.cloudstorage.model.CredentialForm;
 import com.udacity.jwdnd.course1.cloudstorage.model.Note;
 import com.udacity.jwdnd.course1.cloudstorage.service.CredentialsService;
 
@@ -33,18 +33,19 @@ public class CredentialsController {
     }
 
     @PostMapping("/credential-save")
-    public String postCredentialSave(Authentication authentication, @ModelAttribute("noteModal") Note note, @ModelAttribute("credentialModal") Credential credential, Model model) {
-        System.out.println("In postCredentialSave: " + credential);
+    public String postCredentialSave(Authentication authentication, @ModelAttribute("noteModal") Note note,
+                                     @ModelAttribute("credentialModal") CredentialForm credentialForm, Model model) {
+        System.out.println("In postCredentialSave: " + credentialForm);
         String error = null;
 
         if(error == null
-           && !credentialsService.isCredentialValid(credential, authentication.getName())) {
+           && !credentialsService.isCredentialValid(credentialForm, authentication.getName())) {
             error = "Another credential with the same url and username already exists!";
         }
         
         if(error == null) {
             try {
-                credentialsService.saveCredential(credential, authentication.getName());
+                credentialsService.saveCredential(credentialForm, authentication.getName());
             }
             catch(IOException e) {
                 error = "Saving credential failed: " + e.getMessage();
@@ -65,7 +66,7 @@ public class CredentialsController {
 
     @GetMapping("/credential-delete")
     public String getCredentialDelete(Authentication authentication, @RequestParam("credentialId") Integer credentialId,
-                        @ModelAttribute("noteModal") Note note, @ModelAttribute("credentialModal") Credential credential, Model model) {
+                        @ModelAttribute("noteModal") Note note, @ModelAttribute("credentialModal") CredentialForm credentialForm, Model model) {
         System.out.println("In getCredentialDelete:" + credentialId);
 
         credentialsService.deleteCredential(credentialId, authentication.getName());

@@ -1,12 +1,14 @@
 package com.udacity.jwdnd.course1.cloudstorage.service;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
 
 import com.udacity.jwdnd.course1.cloudstorage.mapper.CredentialsMapper;
 import com.udacity.jwdnd.course1.cloudstorage.model.Credential;
+import com.udacity.jwdnd.course1.cloudstorage.model.CredentialForm;
 
 import org.springframework.stereotype.Service;
 
@@ -14,10 +16,12 @@ import org.springframework.stereotype.Service;
 public class CredentialsService {
     private final CredentialsMapper credentialsMapper;
     private final UserService userService;
+    private final EncryptionService encryptionService;
 
-    public CredentialsService(CredentialsMapper credentialsMapper, UserService userService) {
+    public CredentialsService(CredentialsMapper credentialsMapper, UserService userService, EncryptionService encryptionService) {
         this.credentialsMapper = credentialsMapper;
         this.userService = userService;
+        this.encryptionService = encryptionService;
     }
     
     @PostConstruct
@@ -25,27 +29,36 @@ public class CredentialsService {
         System.out.println("CredentialsService bean created");
     }
 
-    public boolean isCredentialValid(Credential credential, String username) {
+    public boolean isCredentialValid(CredentialForm credentialForm, String username) {
 
-        if(credential.getUrl() == null || credential.getUrl().isBlank() ||
-           credential.getUsername() == null || credential.getUsername().isBlank() ||
-           credential.getPassword() == null || credential.getPassword().isBlank())   {
+        if(credentialForm.getUrl() == null || credentialForm.getUrl().isBlank() ||
+           credentialForm.getUsername() == null || credentialForm.getUsername().isBlank() ||
+           credentialForm.getPassword() == null || credentialForm.getPassword().isBlank())   {
             return false;
         }
 
         int userid = userService.getUser(username).getUserid();
 
-        return !credentialsMapper.existsByUrlUserWithAnotherId(credential.getUrl(), credential.getUsername(), credential.getCredentialId(), userid);
+        return !credentialsMapper.existsByUrlUserWithAnotherId(credentialForm.getUrl(), credentialForm.getUsername(),
+                                                               credentialForm.getCredentialId(), userid);
     }
 
-    public int saveCredential(final Credential credential, final String username) throws IOException {
-        System.out.printf("In CredentialsService::saveCredential: %s username: \"%s\"\n", credential, username);
+    public int saveCredential(final CredentialForm credentialForm, final String username) throws IOException {
+        System.out.printf("In CredentialsService::saveCredential: %s username: \"%s\"\n", credentialForm, username);
 
         int userid = userService.getUser(username).getUserid();
-        credential.setUserid(userid);
+
+        String key = encryptionService.generateNewKey();
+        String encryptedPassword = encryptionService.encryptValue(credentialForm.getPassword(), key);
+
+        Credential credential
+             = new Credential(credentialForm.getCredentialId(), credentialForm.getUrl(), credentialForm.getUsername(),
+                              key, encryptedPassword, userid);
 
         int credentialId = 0;
         if(credential.getCredentialId() == null) {
+
+
             credentialId = credentialsMapper.insert(credential);
             System.out.println("Credential insterted into database with credentialId:" + credentialId);
         }
@@ -68,13 +81,18 @@ public class CredentialsService {
         credentialsMapper.deleteByUser(credentialId, userid);
     }
 
-    public List<Credential> listCredentials(String userName) {
+    public List<CredentialForm> listCredentials(String userName) {
         System.out.println("In CredentialsService::listCredentials");
         int userid = userService.getUser(userName).getUserid();
         List<Credential> credentialList = credentialsMapper.listByUser(userid);
+        List<CredentialForm> cFormList = new ArrayList<CredentialForm>();
         for(Credential credential : credentialList) {
-            System.out.printf("credentialList id: %d url:%s username:%s\n", credential.getCredentialId(), credential.getUrl(), credential.getUsername());
+            System.out.println("credentialList: " + credential);
+            String decryptedPassword = encryptionService.decryptValue(credential.getPassword(), credential.getKey());
+            CredentialForm cForm = new CredentialForm(credential.getCredentialId(), credential.getUrl(), credential.getUsername(),
+                                                      decryptedPassword, credential.getPassword());
+            cFormList.add(cForm);
         }
-        return credentialList;
+        return cFormList;
     }
 }

@@ -4,7 +4,7 @@ import java.io.IOException;
 
 import javax.annotation.PostConstruct;
 
-import com.udacity.jwdnd.course1.cloudstorage.model.Credential;
+import com.udacity.jwdnd.course1.cloudstorage.model.CredentialForm;
 import com.udacity.jwdnd.course1.cloudstorage.model.Note;
 import com.udacity.jwdnd.course1.cloudstorage.service.NotesService;
 
@@ -33,7 +33,7 @@ public class NotesController {
 
     @PostMapping("/note-save")
     public String postNoteSave(Authentication authentication, @ModelAttribute("noteModal") Note note,
-                               @ModelAttribute("credentialModal") Credential credential, Model model) {
+                               @ModelAttribute("credentialModal") CredentialForm credentialForm, Model model) {
         System.out.println("In postNoteSave: " + note);
         String error = null;
 
@@ -63,7 +63,7 @@ public class NotesController {
 
     @GetMapping("/note-delete")
     public String getNoteDelete(Authentication authentication, @RequestParam("noteId") Integer noteId,
-                                @ModelAttribute("noteModal") Note note, @ModelAttribute("credentialModal") Credential credential, Model model) {
+                                @ModelAttribute("noteModal") Note note, @ModelAttribute("credentialModal") CredentialForm credentialForm, Model model) {
         System.out.println("In getNoteDelete:" + noteId);
 
         notesService.deleteNote(noteId, authentication.getName());
