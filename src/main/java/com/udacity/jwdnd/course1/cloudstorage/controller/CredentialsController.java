@@ -71,6 +71,8 @@ public class CredentialsController {
 
         credentialsService.deleteCredential(credentialId, authentication.getName());
 
+        model.addAttribute("credentialDeletedSuccess", true);
+
         homeController.addCommonModelAttributes(model, authentication.getName(), "credentials");
 
         return "home";

@@ -68,6 +68,8 @@ public class NotesController {
 
         notesService.deleteNote(noteId, authentication.getName());
 
+        model.addAttribute("noteDeletedSuccess", true);
+
         homeController.addCommonModelAttributes(model, authentication.getName(), "notes");
 
         return "home";

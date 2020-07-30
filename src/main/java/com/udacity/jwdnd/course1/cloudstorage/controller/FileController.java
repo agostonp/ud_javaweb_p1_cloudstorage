@@ -80,6 +80,8 @@ public class FileController {
 
         fileService.deleteFile(fileId, authentication.getName());;
 
+        model.addAttribute("fileDeletedSuccess", true);
+
         homeController.addCommonModelAttributes(model, authentication.getName(), "files");
 
         return "home";

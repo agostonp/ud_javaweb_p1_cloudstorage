@@ -34,6 +34,9 @@
                             <div class="alert alert-dark" th:if="${uploadSuccess}">
                                 <span>File uploaded successfully!</span>
                             </div>
+                            <div class="alert alert-dark" th:if="${fileDeletedSuccess}">
+                                <span>File deleted successfully!</span>
+                            </div>
                             <div class="alert alert-danger" th:if="${uploadError}">
                                 <span th:text="${uploadError}"></span>
                             </div>
@@ -80,6 +83,9 @@
                         <div class="table-responsive">
                             <div class="alert alert-dark" th:if="${noteSavedSuccess}">
                                 <span>Note saved successfully!</span>
+                            </div>
+                            <div class="alert alert-dark" th:if="${noteDeletedSuccess}">
+                                <span>Note deleted successfully!</span>
                             </div>
                             <div class="alert alert-danger" th:if="${noteError}">
                                 <span th:text="${noteError}"></span>
@@ -150,6 +156,9 @@
                         <div class="table-responsive">
                             <div class="alert alert-dark" th:if="${credentialSavedSuccess}">
                                 <span>Credential saved successfully!</span>
+                            </div>
+                            <div class="alert alert-dark" th:if="${credentialDeletedSuccess}">
+                                <span>Credential deleted successfully!</span>
                             </div>
                             <div class="alert alert-danger" th:if="${credentialError}">
                                 <span th:text="${credentialError}"></span>
