@@ -49,6 +49,7 @@ public class SignupController {
 
         if (error == null) {
             model.addAttribute("signupSuccess", true);
+            return "login";
         } else {
             model.addAttribute("signupError", error);
         }

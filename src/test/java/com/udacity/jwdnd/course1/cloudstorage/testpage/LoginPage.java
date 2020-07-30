@@ -30,6 +30,8 @@ public class LoginPage {
         this.driver = driver;
         this.wait = new WebDriverWait(driver, 1000);
         wait.until(ExpectedConditions.presenceOfElementLocated(By.id("submit-button")));
+        try { Thread.sleep(500); }
+        catch(InterruptedException e) { System.out.println(e);}
         PageFactory.initElements(driver, this);
     }
 
@@ -47,4 +49,10 @@ public class LoginPage {
         wait.until(ExpectedConditions.presenceOfElementLocated(By.id("logout-message")));
         return driver.findElement(By.id("logout-message")).getText();
     }
+
+    public String getSignupMsg() throws NoSuchElementException {
+        wait.until(ExpectedConditions.presenceOfElementLocated(By.id("signup-msg")));
+        return driver.findElement(By.id("signup-msg")).getText();
+    }
+
 }

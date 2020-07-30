@@ -87,18 +87,16 @@ class UserAndAccessAppTests {
 		String username = "jani";
 		String password = "chat123";
 
-		String expectedSignupSuccesMsg = "You successfully signed up! Please continue to the login page.";
+		String expectedSignupSuccesMsg = "You successfully signed up! Please log in.";
 
 		driver.get(baseURL + "/signup");
 
 		SignupPage signupPage = new SignupPage(driver);
 		signupPage.signup("János", "Szabó", username, password);
-		assertEquals(expectedSignupSuccesMsg, signupPage.getSuccesMsg());
-
-		assertTrue(signupPage.goLogin());
 		signupPage = null;
 
 		LoginPage loginPage = new LoginPage(driver);
+		assertEquals(expectedSignupSuccesMsg, loginPage.getSignupMsg());
 		loginPage.login(username, password);
 		loginPage = null;
 

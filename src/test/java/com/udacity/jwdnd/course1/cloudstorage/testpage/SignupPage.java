@@ -49,11 +49,6 @@ public class SignupPage {
         wSubmitButton.click();
     }
 
-    public String getSuccesMsg() throws NoSuchElementException {
-        wait.until(ExpectedConditions.presenceOfElementLocated(By.id("success-msg")));
-        return driver.findElement(By.id("success-msg")).getText();
-    }
-
     // This can only be used after successful signup
     public boolean goLogin() {
         try {
